@@ -64,8 +64,6 @@ CREATE TABLE "shop_product" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "n
 COMMIT;
 ```
 
-Zrzut ekranu tabeli `shop_product` z DB Browser for SQLite: **DODAJ do `docs/`**.
-
 ### Zadanie 3 – zmiana modelu
 
 Dodane pole `stock = PositiveIntegerField("stan magazynowy", default=0)` → drugi plik `0002_product_stock.py` (`AddField`). Po `migrate` dane z zadania 4 zostają w tabeli, bo zmiana schematu jest migracją, a nie usuwaniem bazy.
@@ -132,7 +130,7 @@ ProtectedError: Cannot delete some instances of model 'Category' because they ar
 
 ### Zadanie 6 – panel admina
 
-Superużytkownik: `python manage.py createsuperuser`. Oba modele są zarejestrowane w `shop/admin.py` z `list_display`, `list_filter`, `search_fields` i `list_editable` (cena i dostępność edytowane bezpośrednio na liście). Panel: `/admin/`. Zrzut ekranu listy produktów (5 rekordów wpisanych przez admina): **DODAJ do `docs/`**.
+Superużytkownik: `python manage.py createsuperuser`. Oba modele są zarejestrowane w `shop/admin.py` z `list_display`, `list_filter`, `search_fields` i `list_editable` (cena i dostępność edytowane bezpośrednio na liście). Panel: `/admin/`.
 
 ### Zadanie 7 – widoki na modelach
 
