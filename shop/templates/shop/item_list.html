@@ -1,0 +1,20 @@
+{% extends "shop/base.html" %}
+{% block title %}Przedmioty – Sklep 4TP{% endblock %}
+{% block content %}
+<h1>Przedmioty ({{ items|length }})</h1>
+
+<table>
+    <tr><th>#</th><th>Nazwa</th><th>Cena</th><th>Kategoria</th><th>Status</th></tr>
+    {% for item in items %}
+    <tr{% if not item.is_available %} class="unavailable"{% endif %}>
+        <td>{{ forloop.counter }}</td>
+        <td><a href="{% url 'shop:item_detail' item.id %}">{{ item.name }}</a></td>
+        <td>{{ item.price }} zł</td>
+        <td>{{ item.category }}</td>
+        <td>{% if item.is_available %}dostępny{% else %}<b>brak</b>{% endif %}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5">Brak przedmiotów.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

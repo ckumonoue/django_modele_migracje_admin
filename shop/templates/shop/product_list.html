@@ -1,0 +1,26 @@
+{% extends "shop/base.html" %}
+{% block title %}Produkty – Sklep 4TP{% endblock %}
+{% block content %}
+<h1>Produkty ({{ products|length }})</h1>
+
+<form method="get">
+    {{ form.as_p }}
+    <button>Szukaj</button>
+</form>
+
+{% if products %}
+<table>
+    <tr><th>#</th><th>Nazwa</th><th>Cena</th><th>Status</th></tr>
+    {% for p in products %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td><a href="{% url 'shop:product_detail' p.id %}">{{ p.name }}</a></td>
+        <td>{{ p.price }} zł</td>
+        <td>{% if p.is_available %}dostępny{% else %}<b>brak</b>{% endif %}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Brak produktów.</p>
+{% endif %}
+{% endblock %}

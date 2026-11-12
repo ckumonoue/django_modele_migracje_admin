@@ -1,0 +1,9 @@
+{% extends "shop/base.html" %}
+{% block title %}{{ item.name }} – Sklep 4TP{% endblock %}
+{% block content %}
+<h1>{{ item.name }}</h1>
+<p>Cena: {{ item.price }} zł</p>
+<p>Kategoria: {{ item.category }}</p>
+<p>Dostępny: {{ item.is_available|yesno:"tak,nie" }}</p>
+<a href="{% url 'shop:item_list' %}">Wróć</a>
+{% endblock %}
