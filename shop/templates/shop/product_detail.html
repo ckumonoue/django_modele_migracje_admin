@@ -1,7 +1,11 @@
 {% extends "shop/base.html" %}
+{% block title %}{{ product.name }} – Sklep 4TP{% endblock %}
 {% block content %}
 <h1>{{ product.name }}</h1>
-<p>Cena: {{ product.price }} zł</p>
+<p>Kategoria: {{ product.category }}</p>
+<p>Cena: {{ product.price }} zł (brutto: {{ product.gross_price }} zł)</p>
 <p>Dostępny: {{ product.is_available|yesno:"tak,nie" }}</p>
+<p>Stan magazynowy: {{ product.stock }}</p>
+{% if product.description %}<p>{{ product.description }}</p>{% endif %}
 <a href="{% url 'shop:product_list' %}">Wróć</a>
 {% endblock %}

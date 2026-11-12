@@ -102,3 +102,9 @@ ProtectedError: Cannot delete some instances of model 'Category' because they ar
 ### Zadanie 6 – panel admina
 
 Superużytkownik: `python manage.py createsuperuser`. Oba modele są zarejestrowane w `shop/admin.py` z `list_display`, `list_filter`, `search_fields` i `list_editable` (cena i dostępność edytowane bezpośrednio na liście). Panel: `/admin/`. Zrzut ekranu listy produktów (5 rekordów wpisanych przez admina): **DODAJ do `docs/`**.
+
+### Zadanie 7 – widoki na modelach
+
+Lista słowników `PRODUCTS` została usunięta. `product_list` korzysta z `Product.objects.select_related("category")` (jeden `JOIN` zamiast zapytania o kategorię dla każdego produktu – problem N+1), wyszukiwarka z materiału 11 używa `filter(name__icontains=q)` i `filter(is_available=True)`. `product_detail` używa `get_object_or_404`. Szablony korzystają z `p.pk`, `p.category` i `p.gross_price`.
+
+Strony `/items/` z materiałów 10 i 11 nadal działają na liście słowników `ITEMS` (nie są częścią tego zadania).

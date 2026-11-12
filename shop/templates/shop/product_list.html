@@ -8,19 +8,19 @@
     <button>Szukaj</button>
 </form>
 
-{% if products %}
 <table>
-    <tr><th>#</th><th>Nazwa</th><th>Cena</th><th>Status</th></tr>
+    <tr><th>#</th><th>Nazwa</th><th>Kategoria</th><th>Cena</th><th>Brutto</th><th>Status</th></tr>
     {% for p in products %}
     <tr>
         <td>{{ forloop.counter }}</td>
-        <td><a href="{% url 'shop:product_detail' p.id %}">{{ p.name }}</a></td>
+        <td><a href="{% url 'shop:product_detail' p.pk %}">{{ p.name }}</a></td>
+        <td>{{ p.category }}</td>
         <td>{{ p.price }} zł</td>
-        <td>{% if p.is_available %}dostępny{% else %}<b>brak</b>{% endif %}</td>
+        <td>{{ p.gross_price }} zł</td>
+        <td>{{ p.is_available|yesno:"dostępny,brak" }}</td>
     </tr>
+    {% empty %}
+    <tr><td colspan="6">Brak produktów.</td></tr>
     {% endfor %}
 </table>
-{% else %}
-<p>Brak produktów.</p>
-{% endif %}
 {% endblock %}

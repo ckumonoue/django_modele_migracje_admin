@@ -1,14 +1,9 @@
 from django.http import Http404, HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from .forms import ProductForm, SearchForm
-
-PRODUCTS = [
-    {"id": 1, "name": "Laptop", "price": 2999, "category": "laptops", "is_available": True},
-    {"id": 2, "name": "Mysz", "price": 49, "category": "accessories", "is_available": False},
-    {"id": 3, "name": "Klawiatura", "price": 199, "category": "accessories", "is_available": True},
-]
+from .models import Product
 
 ITEMS = [
     {"id": 1, "name": "Laptop", "price": 2999, "category": "laptops", "is_available": True},
@@ -99,20 +94,18 @@ def links(request):
 
 def product_list(request):
     form = SearchForm(request.GET)
-    products = PRODUCTS
+    products = Product.objects.select_related("category")
     if form.is_valid():
         q = form.cleaned_data["q"]
         if q:
-            products = [p for p in products if q.lower() in p["name"].lower()]
+            products = products.filter(name__icontains=q)
         if form.cleaned_data["only_available"]:
-            products = [p for p in products if p["is_available"]]
+            products = products.filter(is_available=True)
     return render(request, "shop/product_list.html", {"products": products, "form": form})
 
 
 def product_detail(request, product_id):
-    product = next((p for p in PRODUCTS if p["id"] == product_id), None)
-    if product is None:
-        raise Http404("Nie ma takiego produktu")
+    product = get_object_or_404(Product, pk=product_id)
     return render(request, "shop/product_detail.html", {"product": product})
 
 
@@ -120,8 +113,7 @@ def product_add(request):
     if request.method == "POST":
         form = ProductForm(request.POST)
         if form.is_valid():
-            data = form.cleaned_data
-            PRODUCTS.append({"id": len(PRODUCTS) + 1, **data})
+            Product.objects.create(**form.cleaned_data)
             return redirect("shop:product_list")
     else:
         form = ProductForm()

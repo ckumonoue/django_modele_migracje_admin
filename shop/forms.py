@@ -2,12 +2,7 @@ from decimal import Decimal
 
 from django import forms
 
-CATEGORIES = [
-    ("laptops", "Laptopy"),
-    ("accessories", "Akcesoria"),
-    ("monitors", "Monitory"),
-]
-
+from .models import Category
 
 class ProductForm(forms.Form):
     name = forms.CharField(
@@ -17,7 +12,7 @@ class ProductForm(forms.Form):
         widget=forms.TextInput(attrs={"class": "wide"}),
     )
     price = forms.DecimalField(label="Cena", min_value=Decimal("0.01"), max_digits=8, decimal_places=2)
-    category = forms.ChoiceField(label="Kategoria", choices=CATEGORIES)
+    category = forms.ModelChoiceField(label="Kategoria", queryset=Category.objects.all())
     is_available = forms.BooleanField(label="Dostępny", required=False, initial=True)
     description = forms.CharField(label="Opis", widget=forms.Textarea, required=False)
 
@@ -31,7 +26,7 @@ class ProductForm(forms.Form):
         cleaned = super().clean()
         price = cleaned.get("price")
         category = cleaned.get("category")
-        if price is not None and category == "laptops" and price < 500:
+        if price is not None and category is not None and category.slug == "laptops" and price < 500:
             self.add_error("price", "Laptop za mniej niż 500 zł? Sprawdź cenę.")
         return cleaned
 
