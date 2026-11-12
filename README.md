@@ -98,3 +98,7 @@ Sesja w konsoli (oczekiwana – **zastąp własnym wydrukiem**):
 >>> lap.delete()
 ProtectedError: Cannot delete some instances of model 'Category' because they are referenced through protected foreign keys: 'Product.category'.
 ```
+
+### Zadanie 6 – panel admina
+
+Superużytkownik: `python manage.py createsuperuser`. Oba modele są zarejestrowane w `shop/admin.py` z `list_display`, `list_filter`, `search_fields` i `list_editable` (cena i dostępność edytowane bezpośrednio na liście). Panel: `/admin/`. Zrzut ekranu listy produktów (5 rekordów wpisanych przez admina): **DODAJ do `docs/`**.
