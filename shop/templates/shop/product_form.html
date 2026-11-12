@@ -1,7 +1,7 @@
 {% extends "shop/base.html" %}
-{% block title %}Nowy produkt – Sklep 4TP{% endblock %}
+{% block title %}{{ title }} – Sklep 4TP{% endblock %}
 {% block content %}
-<h1>Nowy produkt</h1>
+<h1>{{ title }}</h1>
 <form method="post">
     {% csrf_token %}
     {{ form.non_field_errors }}

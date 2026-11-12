@@ -1,26 +1,26 @@
-from decimal import Decimal
-
 from django import forms
 
-from .models import Category
+from .models import Product
 
-class ProductForm(forms.Form):
-    name = forms.CharField(
-        label="Nazwa",
-        max_length=100,
-        min_length=3,
-        widget=forms.TextInput(attrs={"class": "wide"}),
-    )
-    price = forms.DecimalField(label="Cena", min_value=Decimal("0.01"), max_digits=8, decimal_places=2)
-    category = forms.ModelChoiceField(label="Kategoria", queryset=Category.objects.all())
-    is_available = forms.BooleanField(label="Dostępny", required=False, initial=True)
-    description = forms.CharField(label="Opis", widget=forms.Textarea, required=False)
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ["name", "price", "category", "is_available", "description"]
+        widgets = {"name": forms.TextInput(attrs={"class": "wide"})}
 
     def clean_name(self):
         name = self.cleaned_data["name"].strip()
+        if len(name) < 3:
+            raise forms.ValidationError("Nazwa musi mieć co najmniej 3 znaki.")
         if name.lower() in {"test", "asdf"}:
             raise forms.ValidationError("Wpisz prawdziwą nazwę produktu.")
         return name
+
+    def clean_price(self):
+        price = self.cleaned_data["price"]
+        if price <= 0:
+            raise forms.ValidationError("Cena musi być większa od zera.")
+        return price
 
     def clean(self):
         cleaned = super().clean()

@@ -108,3 +108,16 @@ Superużytkownik: `python manage.py createsuperuser`. Oba modele są zarejestrow
 Lista słowników `PRODUCTS` została usunięta. `product_list` korzysta z `Product.objects.select_related("category")` (jeden `JOIN` zamiast zapytania o kategorię dla każdego produktu – problem N+1), wyszukiwarka z materiału 11 używa `filter(name__icontains=q)` i `filter(is_available=True)`. `product_detail` używa `get_object_or_404`. Szablony korzystają z `p.pk`, `p.category` i `p.gross_price`.
 
 Strony `/items/` z materiałów 10 i 11 nadal działają na liście słowników `ITEMS` (nie są częścią tego zadania).
+
+### Zadanie 8 – ModelForm
+
+`ProductForm` dziedziczy po `forms.ModelForm`, a pola bierze z modelu `Product` (`fields` wypisane jawnie, bez `"__all__"`). Pole `category` jest automatycznie `<select>` z kategoriami z bazy. `widgets` zachowuje klasę CSS `wide` z materiału 11, a własna walidacja zostaje (`clean_name`, `clean()`); `clean_price` i minimalna długość nazwy są w formularzu, bo model nie ma tych ograniczeń. Widok dodawania zapisuje przez `form.save()`.
+
+Liczba linii (niepustych):
+
+| | `forms.Form` (zad. 7) | `ModelForm` (zad. 8) |
+|---|---|---|
+| definicje pól (`Meta` w nowej wersji) | 10 | 4 |
+| cała klasa `ProductForm` | 23 | 24 |
+
+Definicje pól skróciły się z 10 do 4 linii. Cała klasa wyszła o jedną linię dłuższa, bo doszły `clean_price` i sprawdzenie długości nazwy, które wcześniej dawały pola formularza.

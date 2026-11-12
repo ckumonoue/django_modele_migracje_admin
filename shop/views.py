@@ -113,8 +113,8 @@ def product_add(request):
     if request.method == "POST":
         form = ProductForm(request.POST)
         if form.is_valid():
-            Product.objects.create(**form.cleaned_data)
+            form.save()
             return redirect("shop:product_list")
     else:
         form = ProductForm()
-    return render(request, "shop/product_form.html", {"form": form})
+    return render(request, "shop/product_form.html", {"form": form, "title": "Nowy produkt"})
