@@ -7,5 +7,6 @@
 <p>Dostępny: {{ product.is_available|yesno:"tak,nie" }}</p>
 <p>Stan magazynowy: {{ product.stock }}</p>
 {% if product.description %}<p>{{ product.description }}</p>{% endif %}
+<a href="{% url 'shop:product_edit' product.pk %}">Edytuj</a> |
 <a href="{% url 'shop:product_list' %}">Wróć</a>
 {% endblock %}

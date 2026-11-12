@@ -1,6 +1,7 @@
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.views.decorators.http import require_POST
 
 from .forms import ProductForm, SearchForm
 from .models import Product
@@ -118,3 +119,22 @@ def product_add(request):
     else:
         form = ProductForm()
     return render(request, "shop/product_form.html", {"form": form, "title": "Nowy produkt"})
+
+
+def product_edit(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    if request.method == "POST":
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect("shop:product_detail", product_id=product.pk)
+    else:
+        form = ProductForm(instance=product)
+    return render(request, "shop/product_form.html", {"form": form, "title": f"Edycja: {product.name}"})
+
+
+@require_POST
+def product_delete(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    product.delete()
+    return redirect("shop:product_list")

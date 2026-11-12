@@ -9,7 +9,7 @@
 </form>
 
 <table>
-    <tr><th>#</th><th>Nazwa</th><th>Kategoria</th><th>Cena</th><th>Brutto</th><th>Status</th></tr>
+    <tr><th>#</th><th>Nazwa</th><th>Kategoria</th><th>Cena</th><th>Brutto</th><th>Status</th><th></th></tr>
     {% for p in products %}
     <tr>
         <td>{{ forloop.counter }}</td>
@@ -18,9 +18,16 @@
         <td>{{ p.price }} zł</td>
         <td>{{ p.gross_price }} zł</td>
         <td>{{ p.is_available|yesno:"dostępny,brak" }}</td>
+        <td>
+            <a href="{% url 'shop:product_edit' p.pk %}">Edytuj</a>
+            <form method="post" action="{% url 'shop:product_delete' p.pk %}" style="display:inline">
+                {% csrf_token %}
+                <button>Usuń</button>
+            </form>
+        </td>
     </tr>
     {% empty %}
-    <tr><td colspan="6">Brak produktów.</td></tr>
+    <tr><td colspan="7">Brak produktów.</td></tr>
     {% endfor %}
 </table>
 {% endblock %}

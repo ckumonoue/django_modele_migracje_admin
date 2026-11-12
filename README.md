@@ -121,3 +121,12 @@ Liczba linii (niepustych):
 | cała klasa `ProductForm` | 23 | 24 |
 
 Definicje pól skróciły się z 10 do 4 linii. Cała klasa wyszła o jedną linię dłuższa, bo doszły `clean_price` i sprawdzenie długości nazwy, które wcześniej dawały pola formularza.
+
+### Zadanie 9 – edycja i usuwanie
+
+`product_edit` używa tego samego formularza i szablonu co dodawanie; `ProductForm(request.POST, instance=product)` nadpisuje istniejący produkt, a `title` w kontekście zmienia nagłówek. `product_delete` ma `@require_POST` i jest wywoływany formularzem POST (z `{% csrf_token %}`) z listy produktów.
+
+Sprawdzenie (**potwierdź u siebie**):
+
+- GET na `/products/<id>/delete/` → **405 Method Not Allowed**; widok w ogóle się nie uruchamia.
+- Edycja bez `instance` (`ProductForm(request.POST)`) → zapis tworzy **nowy** produkt zamiast zmienić stary, więc na liście pojawia się duplikat.
