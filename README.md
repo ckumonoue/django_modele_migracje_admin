@@ -46,3 +46,32 @@ shop
  [X] 0001_initial
  [X] 0002_product_stock
 ```
+
+### Zadanie 4 – CRUD w konsoli (`python manage.py shell`)
+
+Przebieg sesji (oczekiwany – **zastąp własnym wydrukiem z konsoli**):
+
+```python
+>>> from decimal import Decimal
+>>> from shop.models import Product
+>>> p = Product(name="Laptop", price=Decimal("2999.00"))
+>>> p.save()                                            # save()
+>>> Product.objects.create(name="Mysz", price=49, is_available=False)   # create()
+<Product: Mysz>
+>>> Product.objects.create(name="Klawiatura", price=199)
+<Product: Klawiatura>
+>>> Product.objects.all()
+<QuerySet [<Product: Klawiatura>, <Product: Laptop>, <Product: Mysz>]>   # ordering = ["name"]
+>>> Product.objects.get(name="Mysz")
+<Product: Mysz>
+>>> Product.objects.filter(price__gte=100, name__icontains="lap")      # dwa lookupy
+<QuerySet [<Product: Laptop>]>
+>>> Product.objects.order_by("-price")
+<QuerySet [<Product: Laptop>, <Product: Klawiatura>, <Product: Mysz>]>
+>>> Product.objects.filter(is_available=False).update(price=0)         # hurtowo
+1
+>>> print(Product.objects.filter(is_available=True).query)
+SELECT "shop_product"."id", "shop_product"."name", ... FROM "shop_product" WHERE "shop_product"."is_available" ORDER BY "shop_product"."name" ASC
+>>> Product.objects.get(name="Mysz").delete()
+(1, {'shop.Product': 1})
+```
