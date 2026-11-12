@@ -16,6 +16,37 @@ python manage.py runserver
 
 Serwer: http://127.0.0.1:8000, panel admina: http://127.0.0.1:8000/admin/
 
+## Struktura (MTV)
+
+| Warstwa | Plik | Co tam jest |
+|---|---|---|
+| **Model** | `shop/models.py` | `Category`, `Product`, `gross_price()`, relacja `ForeignKey` |
+| **Template** | `shop/templates/shop/*.html` | wyświetlanie (`base.html`, listy, szczegóły, formularz) |
+| **View** | `shop/views.py` | `objects.filter`, `get_object_or_404`, `form.save()`, `redirect` |
+| formularz | `shop/forms.py` | `ModelForm` + własna walidacja, `SearchForm` |
+| routing | `config/urls.py`, `shop/urls.py` | mapa adresów |
+| migracje | `shop/migrations/` | historia schematu bazy (idzie do Gita) |
+| admin | `shop/admin.py` | zaplecze dla zespołu |
+
+`db.sqlite3` jest w `.gitignore` (to dane, nie kod), a `migrations/` **nie** (to historia bazy – bez niej po `git clone` nie da się odtworzyć tabel).
+
+## Trasy
+
+| Metoda | Adres | Nazwa trasy | Opis |
+|---|---|---|---|
+| GET | `/` | `shop:index` | strona główna |
+| GET | `/products/?q=&only_available=` | `shop:product_list` | lista produktów z bazy, wyszukiwarka |
+| GET, POST | `/products/add/` | `shop:product_add` | dodawanie (ModelForm) |
+| GET | `/products/<id>/` | `shop:product_detail` | szczegóły, 404 gdy brak |
+| GET, POST | `/products/<id>/edit/` | `shop:product_edit` | edycja (`instance`) |
+| POST | `/products/<id>/delete/` | `shop:product_delete` | usuwanie, GET → 405 |
+| GET | `/products/<slug>/` | `shop:product_slug` | produkt po slugu (z materiału 10) |
+| GET | `/items/`, `/items/<id>/` | `shop:item_list`, `shop:item_detail` | lista `ITEMS` z materiału 11 |
+| GET | `/about/`, `/contact/`, `/terms/`, `/api/info/`, `/admin-panel/` | `shop:about` … | strony z materiału 10 |
+| GET | `/hello/…`, `/add/…`, `/subtract/…`, `/multiply/…`, `/divide/…` | `shop:hello` … | trasy dynamiczne z materiału 10 |
+| GET | `/start/`, `/links/` | `shop:start`, `shop:links` | redirect i `reverse` |
+| GET | `/admin/` | – | panel admina Django |
+
 ## Notatki
 
 ### Zadanie 2 – migracje
