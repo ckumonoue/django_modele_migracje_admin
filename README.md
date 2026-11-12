@@ -34,3 +34,15 @@ COMMIT;
 ```
 
 Zrzut ekranu tabeli `shop_product` z DB Browser for SQLite: **DODAJ do `docs/`**.
+
+### Zadanie 3 – zmiana modelu
+
+Dodane pole `stock = PositiveIntegerField("stan magazynowy", default=0)` → drugi plik `0002_product_stock.py` (`AddField`). Po `migrate` dane z zadania 4 zostają w tabeli, bo zmiana schematu jest migracją, a nie usuwaniem bazy.
+
+`python manage.py showmigrations shop` (oczekiwany wynik – **wklej własny**):
+
+```text
+shop
+ [X] 0001_initial
+ [X] 0002_product_stock
+```
