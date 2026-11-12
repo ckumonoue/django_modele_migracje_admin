@@ -75,3 +75,26 @@ SELECT "shop_product"."id", "shop_product"."name", ... FROM "shop_product" WHERE
 >>> Product.objects.get(name="Mysz").delete()
 (1, {'shop.Product': 1})
 ```
+
+### Zadanie 5 – relacja `Product` → `Category`
+
+`Category` (`name`, `slug`) i `ForeignKey(Category, on_delete=PROTECT, related_name="products")` w `Product`. Migracja `0003` tworzy kategorię, dodaje do niej istniejące produkty (kategoria „Inne”) i dopiero wtedy dodaje kolumnę `category_id` – dzięki temu `migrate` nie wymaga kasowania bazy, mimo że pole nie jest `null`.
+
+Sesja w konsoli (oczekiwana – **zastąp własnym wydrukiem**):
+
+```python
+>>> from shop.models import Category, Product
+>>> lap = Category.objects.create(name="Laptopy", slug="laptops")
+>>> acc = Category.objects.create(name="Akcesoria", slug="accessories")
+>>> Product.objects.create(name="Laptop Dell", price=2999, category=lap)
+>>> Product.objects.create(name="Mysz Logitech", price=49, category=acc)
+>>> p = Product.objects.get(name="Mysz Logitech")
+>>> p.category                              # produkt -> kategoria
+<Category: Akcesoria>
+>>> acc.products.all()                      # kategoria -> produkty (related_name)
+<QuerySet [<Product: Mysz Logitech>]>
+>>> Product.objects.filter(category__slug="laptops")   # lookup przez relację
+<QuerySet [<Product: Laptop Dell>]>
+>>> lap.delete()
+ProtectedError: Cannot delete some instances of model 'Category' because they are referenced through protected foreign keys: 'Product.category'.
+```
